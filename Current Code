@@ -1,23 +1,32 @@
 import requests
 from bs4 import BeautifulSoup
 
-r=requests.get("http://ufcstats.com/statistics/fighters")
-c=r.content
-soup=BeautifulSoup(c,"html.parser")   
+alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 
-all=soup.find_all("tr",{"class":"b-statistics__table-row"})
-# all[2].find("a",{"class":"b-link b-link_style_black"}).text.encode('ascii')
-for i, item in enumerate(all):
-     if i > 1:
-         print(item.find_all("td",{"class":"b-statistics__table-col"})[0].text.encode('ascii','ignore'))
-         print(item.find_all("td",{"class":"b-statistics__table-col"})[1].text.encode('ascii','ignore'))
-         print(item.find_all("td",{"class":"b-statistics__table-col"})[2].text.encode('ascii','ignore'))
-         print(item.find_all("td",{"class":"b-statistics__table-col"})[3].text.encode('ascii','ignore'))
-         print(item.find_all("td",{"class":"b-statistics__table-col"})[4].text.encode('ascii','ignore'))
-         print(item.find_all("td",{"class":"b-statistics__table-col"})[5].text.encode('ascii','ignore'))
-         print(item.find_all("td",{"class":"b-statistics__table-col"})[6].text.encode('ascii','ignore'))
-         print(item.find_all("td",{"class":"b-statistics__table-col"})[7].text.encode('ascii','ignore'))
-         print(item.find_all("td",{"class":"b-statistics__table-col"})[8].text.encode('ascii','ignore'))
-         print(item.find_all("td",{"class":"b-statistics__table-col"})[9].text.encode('ascii','ignore'))
-         print(item.find_all("td",{"class":"b-statistics__table-col"})[10].text.encode('ascii','ignore'))
+base_url="http://ufcstats.com/statistics/fighters?char="
+for char in alphabet:
+    r=requests.get(base_url+char+"&page=all")
+    c=r.content
+    soup=BeautifulSoup(c,"html.parser")  
+    all=soup.find_all("tr",{"class":"b-statistics__table-row"})
 
+    lst = []
+    for i, item in enumerate(all):
+        d = {}
+         if i > 1:
+            d["First"] = item.find_all("td",{"class":"b-statistics__table-col"})[0].text.encode('ascii','ignore')
+            d["Last"] = item.find_all("td",{"class":"b-statistics__table-col"})[1].text.encode('ascii','ignore')
+            d["Nickname"] = item.find_all("td",{"class":"b-statistics__table-col"})[2].text.encode('ascii','ignore')
+            d["Ht."] = item.find_all("td",{"class":"b-statistics__table-col"})[3].text.encode('ascii','ignore')
+            d["Wt."] = item.find_all("td",{"class":"b-statistics__table-col"})[4].text.encode('ascii','ignore')
+            d["Reach"] = item.find_all("td",{"class":"b-statistics__table-col"})[5].text.encode('ascii','ignore')
+            d["Stance"] = item.find_all("td",{"class":"b-statistics__table-col"})[6].text.encode('ascii','ignore')
+            d["Win"] = item.find_all("td",{"class":"b-statistics__table-col"})[7].text.encode('ascii','ignore')
+            d["Loss"] = item.find_all("td",{"class":"b-statistics__table-col"})[8].text.encode('ascii','ignore')
+            d["Disqualified"] = item.find_all("td",{"class":"b-statistics__table-col"})[9].text.encode('ascii','ignore')
+            d["Belt"] = item.find_all("td",{"class":"b-statistics__table-col"})[10].text.encode('ascii','ignore')
+    lst.append(d)
+
+import pandas
+df = pandas.DataFrame(lst)
+df.to_csv("UFC-Output.csv")  
