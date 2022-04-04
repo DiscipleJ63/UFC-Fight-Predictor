@@ -1,1 +1,23 @@
+import requests
+from bs4 import BeautifulSoup
+
+r=requests.get("http://ufcstats.com/statistics/fighters")
+c=r.content
+soup=BeautifulSoup(c,"html.parser")   
+
+all=soup.find_all("tr",{"class":"b-statistics__table-row"})
+# all[2].find("a",{"class":"b-link b-link_style_black"}).text.encode('ascii')
+for i, item in enumerate(all):
+     if i > 1:
+         print(item.find_all("td",{"class":"b-statistics__table-col"})[0].text.encode('ascii','ignore'))
+         print(item.find_all("td",{"class":"b-statistics__table-col"})[1].text.encode('ascii','ignore'))
+         print(item.find_all("td",{"class":"b-statistics__table-col"})[2].text.encode('ascii','ignore'))
+         print(item.find_all("td",{"class":"b-statistics__table-col"})[3].text.encode('ascii','ignore'))
+         print(item.find_all("td",{"class":"b-statistics__table-col"})[4].text.encode('ascii','ignore'))
+         print(item.find_all("td",{"class":"b-statistics__table-col"})[5].text.encode('ascii','ignore'))
+         print(item.find_all("td",{"class":"b-statistics__table-col"})[6].text.encode('ascii','ignore'))
+         print(item.find_all("td",{"class":"b-statistics__table-col"})[7].text.encode('ascii','ignore'))
+         print(item.find_all("td",{"class":"b-statistics__table-col"})[8].text.encode('ascii','ignore'))
+         print(item.find_all("td",{"class":"b-statistics__table-col"})[9].text.encode('ascii','ignore'))
+         print(item.find_all("td",{"class":"b-statistics__table-col"})[10].text.encode('ascii','ignore'))
 
